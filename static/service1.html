@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Management System - Register New Patient</title>
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+  <div class="container mt-4">
+    <h1>Patient Management System</h1>
+    <hr>
+
+    <h2>Register New Patient</h2>
+    <form id="addPatientForm" class="mb-4">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter Name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input type="date" class="form-control" id="dob" placeholder="Enter Date of Birth" required>
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <select class="form-control inputstl" id="gender">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      </div> 
+
+      <div class="form-group">
+        <label for="contact">Contact</label>
+        <input type="text" class="form-control" id="contact" placeholder="Enter Contact no" required>
+        <small class="text-danger" id="contactError" style="display: none;">Please enter a valid 10-digit mobile number.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="medical_history">Medical History</label>
+        <input type="text" class="form-control" id="medical_history" placeholder="Enter Medical History" required>
+      </div>
+
+      <div class="form-group">
+        <label for="attainder">Attainder</label>
+        <input type="text" class="form-control" id="attainder" placeholder="Enter Attainder Name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="isinsurance">Is Insurance</label>
+        <select class="form-control inputstl" id="isinsurance">
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="payerDiv" style="display: none;">
+        <label for="payer">Payer</label>
+        <input type="text" class="form-control" id="payer" placeholder="Enter Payer Name">
+      </div>
+  
+      
+      <div id="insuranceDetailsContainer" style="display: none;">
+        <div class="form-group">
+          <label for="type">Type</label>
+          <select class="form-control inputstl" id="type">
+            <option value="inpatient">In Patient</option>
+            <option value="outpatient">Out Patient</option>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label for="claimno">Claim No</label>
+          <input type="text" class="form-control" id="claimno" placeholder="Enter Claim No">
+        </div>
+  
+        
+  
+        <div class="form-group">
+          <label for="claimstatus">Claim Status</label>
+          <select class="form-control inputstl" id="claimstatus">
+            <option value="pending">Pending</option>
+            <option value="settled">Settled</option>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label for="claimamt">Claim Amount</label>
+          <input type="text" class="form-control" id="claimamt" placeholder="Enter Claim Amt">
+        </div>
+  
+        <div class="form-group">
+          <label for="settledamt">Settled Amount</label>
+          <input type="text" class="form-control" id="settledamt" placeholder="Enter Settled Amt" >
+        </div>
+      </div>
+  
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+  <div class="mt-4" id="successMessage" style="display: none;">
+    <div class="alert alert-success" role="alert">
+      Patient added successfully! New patient ID: <span id="newPatientId"></span>
+    </div>
+  </div>
+  
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+<script>
+  document.getElementById("isinsurance").addEventListener("change", function () {
+    const payerDiv = document.getElementById("payerDiv");
+    const insuranceDetailsContainer = document.getElementById("insuranceDetailsContainer");
+
+    if (this.value === "Yes") {
+      payerDiv.style.display = "block";
+      insuranceDetailsContainer.style.display = "block";
+    } else {
+      payerDiv.style.display = "none";
+      insuranceDetailsContainer.style.display = "none";
+    }
+  });
+
+  document.getElementById("contact").addEventListener("input", function () {
+    const contactError = document.getElementById("contactError");
+    const contactValue = this.value.trim();
+
+    if (/^\d{10}$/.test(contactValue)) {
+      contactError.style.display = "none";
+    } else {
+      contactError.style.display = "block";
+    }
+  });
+
+  document.getElementById("addPatientForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const formData = {
+      name: document.getElementById("name").value,
+      dob: document.getElementById("dob").value,
+      gender: document.getElementById("gender").value,
+      contact: document.getElementById("contact").value,
+      medical_history: document.getElementById("medical_history").value,
+      attainder: document.getElementById("attainder").value,
+      isinsurance: document.getElementById("isinsurance").value,
+    };
+
+    const claimAmtValue = document.getElementById("claimamt").value;
+    const settledAmtValue = document.getElementById("settledamt").value;
+
+    
+    if (formData.isinsurance === "Yes") {
+      formData.payer = document.getElementById("payer").value;
+      formData.type = document.getElementById("type").value;
+      formData.claimno = document.getElementById("claimno").value;
+      formData.claimstatus = document.getElementById("claimstatus").value;
+      if (!isNaN(claimAmtValue) && !isNaN(settledAmtValue)) {
+        formData.claimamt = parseFloat(claimAmtValue);
+        formData.settledamt = parseFloat(settledAmtValue);
+      } else {
+        alert("Claim Amount and Settled Amount must be numeric values.");
+        return;
+      }
+  
+    } else {
+    
+    formData.claimamt = 0;
+    formData.settledamt = 0;
+    }
+
+
+    fetch("/service1/patients", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const newPatientIdElement = document.getElementById("newPatientId");
+        newPatientIdElement.textContent = data["New patient id : "];
+        document.getElementById("successMessage").style.display = "block";
+        document.getElementById("addPatientForm").reset();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
+
+</script>
+</body>
+</html>
+

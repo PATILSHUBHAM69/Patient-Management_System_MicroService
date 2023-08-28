@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Management System - View Patient Details</title>
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+  <div class="container mt-4">
+    <h1>Patient Management System</h1>
+    <hr>
+
+    <h2>View Patient Details</h2>
+    <div class="form-group">
+      <label for="patientID">Enter Patient ID:</label>
+      <input type="number" class="form-control" id="patientID" placeholder="Enter Patient ID" required>
+    </div>
+    <button type="button" class="btn btn-primary" id="viewPatientBtn">View Patient Details</button>
+
+    <div id="patientDetails">
+
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      function getPatientDetails(patientID) {
+        $.get('/service2/patients/' + patientID, function(data, status) {
+          const patientDetails = `
+            <div class="card mt-4">
+              <div class="card-header">
+                Patient Details (ID: ${data.id})
+              </div>
+              <div class="card-body">
+                <p><strong>Name:</strong> ${data.name}</p>
+                <p><strong>Date of Birth:</strong> ${data.dob}</p>
+                <p><strong>Gender:</strong> ${data.gender}</p>
+                <p><strong>Contact:</strong> ${data.contact}</p>
+                <p><strong>Medical History:</strong> ${data.medical_history}</p>
+                <p><strong>Attainder:</strong> ${data.attainder}</p>
+                <p><strong>Is Insurance:</strong> ${data.isinsurance}</p>
+                <p><strong>Payer:</strong> ${data.payer}</p>
+                <p><strong>Type:</strong> ${data.type}</p>
+                <p><strong>Claim No:</strong> ${data.claimno}</p>
+                <p><strong>Claim Status:</strong> ${data.claimstatus}</p>
+                <p><strong>Claim Amount:</strong> ${data.claimamt}</p>
+                <p><strong>Settled Amount:</strong> ${data.settledamt}</p>
+                <p><strong>PR Amount:</strong> ${data.pramt}</p>
+              </div>
+            </div>
+          `;
+          $('#patientDetails').html(patientDetails);
+        }).fail(function(xhr, status, error) {
+          alert('Error fetching patient details: ' + error);
+        });
+      }
+      $('#viewPatientBtn').click(function() {
+        const patientID = $('#patientID').val();
+        if (patientID !== "") {
+          getPatientDetails(patientID);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

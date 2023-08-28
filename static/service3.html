@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Management System - Update Patient Details</title>
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-4">
+    <h1>Patient Management System</h1>
+    <hr>
+    <h2>Update Patient Details</h2>
+    <form id="updatePatientForm" class="mb-4">
+      <div class="form-group">
+        <label for="patientID">Patient ID</label>
+        <input type="text" class="form-control" id="patientID" placeholder="Enter Patient ID" required>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" >
+      </div>
+
+      <div class="form-group">
+        <label for="name">Date of Birth</label>
+        <input type="date" class="form-control" id="dob" name="dob" placeholder="Enter Date of Birth">
+      </div>
+
+      <div class="form-group">
+        <label>Gender</label>
+        <select class="form-control inputstl" id="gender">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          </select>
+    
+      </div>
+      
+      <div class="form-group">
+        <label for="contact">Contact</label>
+        <input type="text" class="form-control" id="contact" placeholder="Enter Contact no">
+        <small class="text-danger" id="contactError" style="display: none;">Please enter a valid 10-digit mobile number.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Medical History</label>
+        <input type="text" class="form-control" id="medical_history" name="medical_history" placeholder="Enter Medical History">
+      </div>
+
+      <div class="form-group">
+        <label for="name">Attainder</label>
+        <input type="text" class="form-control" id="attainder" name="attainder" placeholder="Enter Attainder Name">
+      </div>
+
+      <div class="form-group">
+        <label>Is Insurance</label>
+        <select class="form-control inputstl" id="isinsurance">
+            <option value="No">No</option>
+            <option value="Yes">Yes</option>   
+          </select>
+  
+      </div>
+
+      <div class="form-group">
+        <label for="name">Payer</label>
+        <input type="text" class="form-control" id="payer" name="payer" placeholder="Enter Payer Name">
+      </div>
+
+
+      <div class="form-group">
+        <label>Type</label>
+        <select class="form-control inputstl" id="type">
+          <option value="inpatient">In Patient</option>
+          <option value="outpatient">Out Patient</option>
+          </select>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Claim No</label>
+        <input type="text" class="form-control" id="claimno" name="claimno" placeholder="Enter Claim No">
+      </div>
+
+
+      <div class="form-group">
+        <label for="claimstatus">Claim Status</label>
+        <select class="form-control inputstl" id="claimstatus">
+          <option value="pending">Pending</option>
+          <option value="settled">Settled</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Claim Amount</label>
+        <input type="text" class="form-control" id="claimamt" name="claimamt" placeholder="Enter Claim Amt">
+      </div>
+
+      <div class="form-group">
+        <label for="name">Settled Amount</label>
+        <input type="text" class="form-control" id="settledamt" name="settledamt" placeholder="Enter Settled Amt">
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Fetch and Update</button>
+    </form>
+  </div>
+
+  <div class="mt-4" id="successMessage" style="display: none;">
+    <div class="alert alert-success" role="alert">
+      Patient Updated successfully!
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      $('#updatePatientForm').submit(function(e) {
+        e.preventDefault();
+        const patientID = $('#patientID').val();
+  
+        $.get('/service3/patients?id=' + patientID, function(data, status) {
+        
+          $('#name').val(data.name);
+          $('#dob').val(data.dob);
+          $('#gender').val(data.gender);
+          $('#contact').val(data.contact);
+          $('#medical_history').val(data.medical_history);
+          $('#attainder').val(data.attainder);
+          $('#isinsurance').val(data.isinsurance);
+          $('#payer').val(data.payer);
+          $('#type').val(data.type);
+          $('#claimno').val(data.claimno);
+          $('#claimstatus').val(data.claimstatus);
+          $('#claimamt').val(data.claimamt);
+          $('#settledamt').val(data.settledamt);
+  
+
+          document.getElementById("successMessage").style.display = "none";
+  
+          $('#updatePatientForm').off('submit').on('submit', function(e) {
+            e.preventDefault();
+  
+            const updatedPatientData = {
+              name: $('#name').val(),
+              dob: $('#dob').val(),
+              gender: $('#gender').val(),
+              contact: $('#contact').val(),
+              medical_history: $('#medical_history').val(),
+              attainder: $('#attainder').val(),
+              isinsurance: $('#isinsurance').val(),
+              payer: $('#payer').val(),
+              type: $('#type').val(),
+              claimno: $('#claimno').val(),
+              claimstatus: $('#claimstatus').val(),
+              claimamt: $('#claimamt').val(),
+              settledamt: $('#settledamt').val(),
+            };
+  
+            $.ajax({
+              url: '/service3/patients?id=' + patientID,
+              type: 'PUT',
+              contentType: 'application/json',
+              data: JSON.stringify(updatedPatientData),
+              success: function(data, status) {
+                document.getElementById("successMessage").style.display = "block";
+              },
+              error: function(xhr, status, error) {
+                alert('Error updating patient details: ' + error);
+              }
+            });
+          });
+        }).fail(function(xhr, status, error) {
+          alert('Error fetching patient details: ' + error);
+        });
+      });
+    });
+  </script> 
+</body>
+</html>
+

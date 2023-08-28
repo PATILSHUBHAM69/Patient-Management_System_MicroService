@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Management System - Add New Patient</title>
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+  <div class="container mt-4">
+    <h1>Patient Management System</h1>
+    <hr>
+
+    <h2>Add New Patient</h2>
+    <form id="addPatientForm" class="mb-4">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter Name" required>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Date of Birth</label>
+        <input type="date" class="form-control" id="dob" placeholder="Enter Date of Birth" required>
+      </div>
+
+      <div class="form-group">
+        <label>Gender</label>
+        <select class="form-control inputstl" id="gender">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          </select>
+    
+      </div> 
+
+      <div class="form-group">
+        <label for="name">Contact</label>
+        <input type="text" class="form-control" id="contact" placeholder="Enter Contact no" required>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Medical History</label>
+        <input type="text" class="form-control" id="medical_history" placeholder="Enter Medical History" required>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Attainder</label>
+        <input type="text" class="form-control" id="attainder" placeholder="Enter Attainder Name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Is Insurance</label>
+        <select class="form-control inputstl" id="isinsurance">
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+          </select>
+  
+      </div>
+
+      <div class="form-group">
+        <label for="name">Payer</label>
+        <input type="text" class="form-control" id="payer" placeholder="Enter Payer Name">
+      </div>
+
+
+      <div class="form-group">
+        <label>Type</label>
+        <select class="form-control inputstl" id="type">
+          <option value="inpatient">In Patient</option>
+          <option value="outpatient">Out Patient</option>
+          </select>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Claim No</label>
+        <input type="text" class="form-control" id="claimno" placeholder="Enter Claim No">
+      </div>
+
+
+      <div class="form-group">
+        <label>Claim Status</label>
+        <select class="form-control inputstl" id="claimstatus">
+          <option value="pending">Pending</option>
+          <option value="settled">Settled</option>
+          </select>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Claim Amount</label>
+        <input type="text" class="form-control" id="claimamt" placeholder="Enter Claim Amt">
+      </div>
+
+      <div class="form-group">
+        <label for="name">Settled Amount</label>
+        <input type="text" class="form-control" id="settledamt" placeholder="Enter Settled Amt" >
+      </div>
+
+      
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+
+  <div class="mt-4" id="successMessage" style="display: none;">
+    <div class="alert alert-success" role="alert">
+      Patient added successfully!
+    </div>
+  </div>
+
+  
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  
+
+<script>
+
+  document.getElementById("addPatientForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const formData = {
+      name: document.getElementById("name").value,
+      dob: document.getElementById("dob").value,
+      gender: document.getElementById("gender").value,
+      contact: document.getElementById("contact").value,
+      medical_history: document.getElementById("medical_history").value,
+      attainer: document.getElementById("attainder").value,
+      isinsurance: document.getElementById("isinsurance").value,
+      payer: document.getElementById("payer").value,
+      type: document.getElementById("type").value,
+      claimno: document.getElementById("claimno").value,
+      claimstatus: document.getElementById("claimstatus").value,
+      claimamt: document.getElementById("claimamt").value,
+      settledamt: document.getElementById("settledamt").value,
+      
+    };
+
+    fetch("/service1/patients", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+
+        document.getElementById("successMessage").style.display = "block";
+
+        
+        document.getElementById("addPatientForm").reset();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
+</script>
+</body>
+</html>
+
+  
+
+
